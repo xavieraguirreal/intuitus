@@ -50,12 +50,12 @@ export default function Teleprompter({
   if (!isVisible) return null;
 
   return (
-    <div className="teleprompter-wrapper fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex flex-col">
+    <div className="teleprompter-wrapper fixed top-0 left-0 w-full h-full z-50 flex flex-col">
       {/* Botón de cerrar */}
       {onClose && (
         <button
           onClick={onClose}
-          className="absolute top-4 left-4 z-[60] w-12 h-12 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center transition-all shadow-2xl border-2 border-white/20"
+          className="absolute top-4 left-4 z-[60] w-12 h-12 rounded-full bg-red-600/90 hover:bg-red-700 flex items-center justify-center transition-all shadow-2xl border-2 border-white/40 backdrop-blur-sm"
           title="Cerrar Teleprompter (ESC)"
         >
           <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -64,8 +64,11 @@ export default function Teleprompter({
         </button>
       )}
 
+      {/* Franja de lectura con fondo difuminado */}
+      <div className="reading-area absolute top-1/4 left-0 right-0 h-1/2 bg-black/30 backdrop-blur-md pointer-events-none z-[5]" />
+
       {/* Indicador de lectura central */}
-      <div className="reading-line absolute top-1/3 left-0 right-0 h-0.5 bg-yellow-400/40 pointer-events-none z-10" />
+      <div className="reading-line absolute top-1/3 left-0 right-0 h-0.5 bg-yellow-400/60 pointer-events-none z-10" />
 
       {/* Contenedor de scroll */}
       <div
@@ -77,7 +80,7 @@ export default function Teleprompter({
         <div style={{ height: 'calc(33.33vh - 50px)' }} />
 
         {/* Contenido del script */}
-        <div className="teleprompter-content mx-auto px-6" style={{ maxWidth: '350px' }}>
+        <div className="teleprompter-content mx-auto px-6 relative z-10" style={{ maxWidth: '350px' }}>
           <div
             className="leading-relaxed"
             style={{
@@ -90,10 +93,11 @@ export default function Teleprompter({
                 return (
                   <span
                     key={index}
-                    className="text-yellow-300"
+                    className="text-yellow-200"
                     style={{
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                      textShadow: '0 0 10px rgba(0,0,0,0.9), 2px 2px 8px rgba(0,0,0,0.8), -1px -1px 4px rgba(0,0,0,0.6)',
                       whiteSpace: 'pre-wrap',
+                      fontWeight: '600',
                     }}
                   >
                     {segment.content}
@@ -109,12 +113,14 @@ export default function Teleprompter({
                 return (
                   <div
                     key={index}
-                    className="my-4 px-4 py-2 bg-green-900/40 border-l-4 border-green-400 rounded"
+                    className="my-4 px-4 py-2 bg-green-900/70 backdrop-blur-sm border-l-4 border-green-400 rounded"
                     style={{
                       fontSize: `${fontSize * 0.75}px`,
                     }}
                   >
-                    <span className="text-green-300 font-semibold">
+                    <span className="text-green-200 font-semibold" style={{
+                      textShadow: '0 0 8px rgba(0,0,0,0.9), 1px 1px 4px rgba(0,0,0,0.8)',
+                    }}>
                       {displayText}
                     </span>
                   </div>
@@ -129,7 +135,7 @@ export default function Teleprompter({
       </div>
 
       {/* Controles flotantes */}
-      <div className="controls-panel absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-900/95 rounded-lg shadow-2xl p-4 flex items-center gap-6 border border-gray-700">
+      <div className="controls-panel absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-black/60 backdrop-blur-lg rounded-lg shadow-2xl p-4 flex items-center gap-6 border border-white/20">
         {/* Play/Pause */}
         <button
           onClick={togglePlay}
@@ -229,7 +235,7 @@ export default function Teleprompter({
       </div>
 
       {/* Atajos de teclado (ayuda) */}
-      <div className="keyboard-hints absolute top-4 right-4 bg-gray-900/80 rounded-lg p-3 text-xs text-gray-400 space-y-1">
+      <div className="keyboard-hints absolute top-4 right-4 bg-black/50 backdrop-blur-md rounded-lg p-3 text-xs text-gray-300 space-y-1 border border-white/20">
         <p>
           <kbd className="px-2 py-1 bg-gray-700 rounded text-yellow-300">Espacio</kbd> Play/Pausa
         </p>
