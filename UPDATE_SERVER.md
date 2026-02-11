@@ -160,6 +160,77 @@ Deberías ver:
    - ✅ Auto-scroll suave
    - ✅ Botón "Cerrar Teleprompter" en esquina superior izquierda funciona
 
+### 5. Probar Biblioteca de Guiones (Tarea #18 - NUEVO)
+
+1. Ve a `/setup` (Configurar)
+2. Verificar que aparecen **DOS botones nuevos** arriba del editor:
+   - ✅ "Cargar Guion Guardado" (azul)
+   - ✅ "Guardar Guion" (verde, deshabilitado si no hay texto)
+
+**Prueba: Guardar un guion**
+1. Escribe un guion de prueba:
+   ```
+   Hola, este es mi primer guion guardado.
+   Voy a probarlo en el teleprompter.
+   ```
+2. Clic en **"Guardar Guion"**
+3. Se abre un prompt pidiendo nombre
+4. Escribe: "Mi primer guion"
+5. Verificar que:
+   - ✅ Aparece mensaje verde: "✓ Guion guardado correctamente"
+   - ✅ Debajo aparece: "Guion actual: Mi primer guion"
+
+**Prueba: Cargar biblioteca**
+1. Clic en **"Cargar Guion Guardado"**
+2. Se abre modal "Mis Guiones"
+3. Verificar que aparece el guion guardado con:
+   - ✅ Nombre: "Mi primer guion"
+   - ✅ Metadata: "X palabras · ~X:XX min"
+   - ✅ Fecha: "Hoy"
+   - ✅ Preview del contenido
+   - ✅ Botones: "Usar", "Duplicar", "Eliminar"
+
+**Prueba: Duplicar guion**
+1. Clic en **"Duplicar"**
+2. Se crea una copia con nombre "(copia)"
+3. Verificar que aparecen **DOS guiones** en la lista
+
+**Prueba: Cargar guion**
+1. Borra el contenido del editor
+2. Clic en **"Usar"** en uno de los guiones
+3. Verificar que:
+   - ✅ Se cierra el modal
+   - ✅ El editor se llena con el contenido del guion
+   - ✅ Aparece "Guion actual: [nombre]"
+
+**Prueba: Eliminar guion**
+1. Clic en **"Eliminar"** en una de las copias
+2. Aparece confirmación: "¿Seguro que deseas eliminar...?"
+3. Confirmar
+4. Verificar que:
+   - ✅ El guion desaparece de la lista
+   - ✅ No afecta el editor si ese guion estaba cargado
+
+**Prueba: IndexedDB persistencia**
+1. Guarda 2-3 guiones
+2. **Recarga la página** (F5)
+3. Abre "Cargar Guion Guardado"
+4. Verificar que:
+   - ✅ Los guiones siguen ahí (datos persistentes)
+   - ✅ Ordenados por fecha de modificación
+
+**Prueba: Estado vacío**
+1. Elimina todos los guiones
+2. Abre "Cargar Guion Guardado"
+3. Verificar que aparece:
+   - ✅ Icono de documento vacío
+   - ✅ "No tienes guiones guardados"
+   - ✅ Mensaje de ayuda
+
+**Consola del navegador (F12):**
+- No debería haber errores de IndexedDB
+- Opcional: Ver en Application → IndexedDB → IntuitusBD → guiones
+
 ## 🐛 Si algo falla
 
 ```bash
