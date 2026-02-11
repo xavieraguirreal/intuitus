@@ -20,6 +20,13 @@ export function useMediaPermissions(options: MediaPermissionsOptions = { video: 
     setPermissionState('requesting');
     setError(null);
 
+    // Verificar si getUserMedia está disponible
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      setError('Tu navegador no soporta acceso a cámara/micrófono, o el sitio no está en HTTPS. Por favor, accede usando HTTPS (https://intuitus.verumax.com)');
+      setPermissionState('error');
+      return null;
+    }
+
     try {
       const mediaStream = await navigator.mediaDevices.getUserMedia({
         video: options.video || false,
