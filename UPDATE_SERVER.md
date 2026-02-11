@@ -231,6 +231,74 @@ Deberías ver:
 - No debería haber errores de IndexedDB
 - Opcional: Ver en Application → IndexedDB → IntuitusBD → guiones
 
+### 6. Probar Importación de Archivos Word/TXT (Tarea #19 - NUEVO)
+
+**Preparación:** Crea estos archivos de prueba en tu computadora:
+
+**archivo_prueba.txt** (en Bloc de notas):
+```
+Este es un guion de prueba importado desde archivo de texto.
+Tiene varias líneas.
+Y funciona perfectamente.
+```
+
+**guion_word.docx** (en Microsoft Word):
+```
+Hola, este es un guion importado desde Word.
+
+Puedo tener:
+- Múltiples párrafos
+- Texto con formato (que se convertirá a texto plano)
+- Y será fácil de editar
+```
+
+**Prueba 1: Importar archivo .txt**
+1. Ve a `/setup` (Configurar)
+2. Verificar que aparece botón **"Importar Word/TXT"** (azul, arriba a la derecha)
+3. Clic en **"Importar Word/TXT"**
+4. Selecciona `archivo_prueba.txt`
+5. Verificar que:
+   - ✅ El contenido se carga instantáneamente en el textarea
+   - ✅ El contador de palabras/tiempo se actualiza
+   - ✅ Puedes editar el texto normalmente
+
+**Prueba 2: Importar archivo .docx (Word)**
+1. Borra el contenido del editor
+2. Clic en **"Importar Word/TXT"**
+3. Selecciona `guion_word.docx`
+4. Verificar que:
+   - ✅ Aparece "Importando..." brevemente
+   - ✅ El texto se extrae como texto plano (sin formato)
+   - ✅ Los saltos de línea se respetan
+   - ✅ No hay caracteres raros o códigos de formato
+
+**Prueba 3: Archivo no soportado**
+1. Intenta importar un archivo .pdf o .jpg
+2. Verificar que:
+   - ✅ Aparece mensaje de error rojo
+   - ✅ Dice: "Formato no soportado. Usa archivos .docx o .txt"
+   - ✅ El editor no se modifica
+
+**Prueba 4: Importar + Guardar**
+1. Importa un archivo Word
+2. Edita el texto si quieres
+3. Clic en **"Guardar Guion"**
+4. Dale un nombre: "Guion importado desde Word"
+5. Verificar que:
+   - ✅ Se guarda correctamente en la biblioteca
+   - ✅ Puedes cargarlo de nuevo más tarde
+
+**Prueba 5: Re-importar**
+1. Importa un archivo .txt
+2. Sin guardarlo, importa otro archivo diferente
+3. Verificar que:
+   - ✅ El segundo archivo reemplaza el primero
+   - ✅ No hay confirmación (se reemplaza directamente)
+
+**Consola del navegador (F12):**
+- No debería haber errores de mammoth
+- Si hay error, verificar que el archivo Word no esté corrupto
+
 ## 🐛 Si algo falla
 
 ```bash
