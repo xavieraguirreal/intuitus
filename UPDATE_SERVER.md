@@ -1,0 +1,68 @@
+# Instrucciones de Actualización del Servidor
+
+## 🔄 Actualizar Intuitus en Producción
+
+Ejecuta estos comandos en SSH cada vez que haya cambios:
+
+```bash
+# Conectar al servidor
+ssh verumax@vps-5361869-x.ferozo.com
+
+# Ir al directorio
+cd /home/verumax/public_html/intuitus
+
+# Pull de cambios
+git pull origin master
+
+# Instalar nuevas dependencias (si las hay)
+npm install
+
+# Build del proyecto
+npm run build
+
+# Reiniciar PM2
+pm2 restart intuitus
+
+# Ver logs
+pm2 logs intuitus --lines 20
+```
+
+## ✅ Verificar que funciona
+
+Abre en el navegador:
+```
+http://intuitus.verumax.com
+```
+
+Deberías ver:
+- ✅ Barra de navegación superior
+- ✅ Breadcrumb con iconos (🏠 ⚙️ 🎬 ✂️)
+- ✅ Botón "Crear Nuevo Proyecto"
+- ✅ Navegación funcional entre vistas
+
+## 🐛 Si algo falla
+
+```bash
+# Ver logs detallados
+pm2 logs intuitus
+
+# Ver logs de Apache
+tail -50 /opt/apache/logs/intuitus-error.log
+
+# Reiniciar todo
+pm2 restart intuitus
+systemctl reload httpd
+```
+
+## 📋 Comandos rápidos
+
+```bash
+# Ver estado
+pm2 status
+
+# Reiniciar
+pm2 restart intuitus
+
+# Ver logs en tiempo real
+pm2 logs intuitus
+```
