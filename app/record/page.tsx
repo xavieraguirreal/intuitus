@@ -57,7 +57,18 @@ export default function RecordPage() {
 
   const handleTeleprompterComplete = () => {
     console.log('Teleprompter completado');
-    // Aquí se podría detener la grabación automáticamente
+    // Detener grabación automáticamente si está grabando
+    if (recordingState === 'recording') {
+      stopRecording();
+    }
+  };
+
+  const handleStartRecordingWithTeleprompter = () => {
+    startRecording();
+    // Abrir teleprompter automáticamente al iniciar grabación
+    setTimeout(() => {
+      setShowTeleprompter(true);
+    }, 500); // Pequeño delay para mejor UX
   };
 
   return (
@@ -124,76 +135,130 @@ export default function RecordPage() {
                     )}
 
                     {/* Botones de control */}
-                    <div className="flex items-center justify-center gap-4">
+                    <div className="flex flex-col items-center gap-4">
                       {recordingState === 'idle' && (
-                        <button
-                          onClick={startRecording}
-                          className="px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors shadow-lg flex items-center"
-                        >
-                          <span className="w-4 h-4 bg-white rounded-full mr-3"></span>
-                          Iniciar Grabación
-                        </button>
+                        <>
+                          <div className="flex gap-3">
+                            <button
+                              onClick={handleStartRecordingWithTeleprompter}
+                              className="px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors shadow-lg flex items-center"
+                            >
+                              <span className="w-4 h-4 bg-white rounded-full mr-3"></span>
+                              Grabar con Teleprompter
+                            </button>
+                            <button
+                              onClick={startRecording}
+                              className="px-8 py-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors shadow-lg flex items-center"
+                            >
+                              <span className="w-4 h-4 bg-white rounded-full mr-3"></span>
+                              Grabar sin Teleprompter
+                            </button>
+                          </div>
+                          <p className="text-xs text-gray-500 text-center">
+                            Recomendado: Usar teleprompter para leer tu guion mientras grabas
+                          </p>
+                        </>
                       )}
 
                       {recordingState === 'recording' && (
                         <>
-                          <button
-                            onClick={pauseRecording}
-                            className="px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg font-semibold transition-colors flex items-center"
-                          >
-                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                              <path
-                                fillRule="evenodd"
-                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Pausar
-                          </button>
-                          <button
-                            onClick={stopRecording}
-                            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors flex items-center"
-                          >
-                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Detener
-                          </button>
+                          <div className="flex gap-3">
+                            <button
+                              onClick={pauseRecording}
+                              className="px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg font-semibold transition-colors flex items-center"
+                            >
+                              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                  fillRule="evenodd"
+                                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              Pausar
+                            </button>
+                            <button
+                              onClick={() => setShowTeleprompter(!showTeleprompter)}
+                              className={`px-6 py-3 rounded-lg font-semibold transition-colors flex items-center ${
+                                showTeleprompter
+                                  ? 'bg-yellow-500 hover:bg-yellow-600 text-gray-900'
+                                  : 'bg-gray-600 hover:bg-gray-500 text-white'
+                              }`}
+                            >
+                              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                />
+                              </svg>
+                              {showTeleprompter ? 'Ocultar' : 'Mostrar'} Teleprompter
+                            </button>
+                            <button
+                              onClick={stopRecording}
+                              className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors flex items-center"
+                            >
+                              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                  fillRule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              Detener
+                            </button>
+                          </div>
                         </>
                       )}
 
                       {recordingState === 'paused' && (
                         <>
-                          <button
-                            onClick={resumeRecording}
-                            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors flex items-center"
-                          >
-                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Reanudar
-                          </button>
-                          <button
-                            onClick={stopRecording}
-                            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors flex items-center"
-                          >
-                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            Detener
-                          </button>
+                          <div className="flex gap-3">
+                            <button
+                              onClick={resumeRecording}
+                              className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors flex items-center"
+                            >
+                              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                  fillRule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              Reanudar
+                            </button>
+                            <button
+                              onClick={() => setShowTeleprompter(!showTeleprompter)}
+                              className={`px-6 py-3 rounded-lg font-semibold transition-colors flex items-center ${
+                                showTeleprompter
+                                  ? 'bg-yellow-500 hover:bg-yellow-600 text-gray-900'
+                                  : 'bg-gray-600 hover:bg-gray-500 text-white'
+                              }`}
+                            >
+                              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                />
+                              </svg>
+                              {showTeleprompter ? 'Ocultar' : 'Mostrar'} Teleprompter
+                            </button>
+                            <button
+                              onClick={stopRecording}
+                              className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors flex items-center"
+                            >
+                              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path
+                                  fillRule="evenodd"
+                                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"
+                                  clipRule="evenodd"
+                                />
+                              </svg>
+                              Detener
+                            </button>
+                          </div>
                         </>
                       )}
 
@@ -343,21 +408,48 @@ export default function RecordPage() {
             onComplete={handleTeleprompterComplete}
           />
 
-          {/* Botón para cerrar teleprompter */}
-          <button
-            onClick={handleCloseTeleprompter}
-            className="fixed top-4 left-4 z-[60] px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-lg transition-colors flex items-center"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-            Cerrar Teleprompter
-          </button>
+          {/* Indicador de grabación en teleprompter */}
+          {(recordingState === 'recording' || recordingState === 'paused') && (
+            <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-[60] bg-gray-900/95 rounded-lg px-6 py-3 shadow-lg border border-gray-700">
+              <div className="flex items-center gap-3">
+                {recordingState === 'recording' && (
+                  <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+                )}
+                {recordingState === 'paused' && (
+                  <span className="w-3 h-3 bg-yellow-500 rounded-full"></span>
+                )}
+                <span className="text-white font-mono text-xl font-bold">{formattedDuration}</span>
+                <span className="text-gray-400 text-sm">
+                  {recordingState === 'recording' ? 'Grabando' : 'Pausado'}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Botón para cerrar teleprompter (solo si no está grabando) */}
+          {recordingState === 'idle' && (
+            <button
+              onClick={handleCloseTeleprompter}
+              className="fixed top-4 left-4 z-[60] px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-lg transition-colors flex items-center"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+              Cerrar Teleprompter
+            </button>
+          )}
+
+          {/* Ayuda: cerrar teleprompter durante grabación */}
+          {(recordingState === 'recording' || recordingState === 'paused') && (
+            <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[60] bg-blue-900/80 rounded-lg px-4 py-2 text-xs text-blue-200">
+              Usa el botón "Ocultar Teleprompter" abajo para cerrar
+            </div>
+          )}
         </>
       )}
     </>
