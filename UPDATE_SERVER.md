@@ -299,6 +299,101 @@ Puedo tener:
 - No debería haber errores de mammoth
 - Si hay error, verificar que el archivo Word no esté corrupto
 
+### 7. Probar Marcadores de Expresión (Tarea #20 - NUEVO)
+
+Los marcadores ayudan a controlar expresiones y pausas mientras leés el teleprompter.
+
+**Prueba 1: Ver ayuda de marcadores**
+1. Ve a `/setup` (Configurar)
+2. En la sección de ayuda azul (abajo del editor), busca el enlace:
+   - ✅ "¿Cómo usar marcadores de expresión?"
+3. Clic en el enlace
+4. Se abre modal con:
+   - ✅ Lista de 11 marcadores con iconos
+   - ✅ Ejemplos de uso
+   - ✅ Descripción de cada marcador
+   - ✅ Tips de uso
+
+**Prueba 2: Usar marcadores en el guion**
+1. En el editor de guion, escribe:
+```
+Hola, bienvenidos a este video.
+[PAUSA 2s]
+Hoy vamos a hablar de un tema muy importante.
+[SERIO]
+Me da mucha alegría compartir esto con ustedes.
+[SONREÍR]
+Este es el punto clave que deben recordar.
+[ÉNFASIS]
+Vamos a tomarnos un momento para respirar.
+[RESPIRAR]
+```
+
+2. Verificar que:
+   - ✅ El editor acepta los marcadores sin errores
+   - ✅ El contador de palabras funciona normalmente
+
+**Prueba 3: Ver marcadores en el teleprompter**
+1. Con el guion de arriba, clic en **"Continuar a Grabación"**
+2. En `/record`, clic en **"Abrir Teleprompter"**
+3. Verificar que aparecen:
+   - ✅ Texto normal: **amarillo** (como antes)
+   - ✅ Marcadores: **verde brillante** en cajas separadas
+   - ✅ Iconos/emojis junto a cada marcador:
+     - ⏸️ PAUSA 2s
+     - 😐 SERIO
+     - 😊 SONREÍR
+     - 📢 ÉNFASIS
+     - 💨 RESPIRAR
+   - ✅ Los marcadores son más pequeños que el texto
+   - ✅ Tienen fondo verde oscuro y borde verde
+
+**Prueba 4: Probar todos los marcadores**
+Guion de prueba completo:
+```
+Bienvenidos. [PAUSA 3s]
+Hoy estoy muy feliz. [ALEGRE]
+Lamentablemente hay malas noticias. [TRISTE]
+¡No lo puedo creer! [SORPRENDIDO]
+Déjame pensar un momento. [PENSATIVO]
+Voy a hablar más despacio ahora. [LENTO]
+Ahora voy a acelerar el ritmo. [RÁPIDO]
+Esto es muy importante. [ÉNFASIS]
+Ahora voy a poner cara seria. [SERIO]
+Y terminamos con una sonrisa. [SONREÍR]
+Recordemos respirar profundo. [RESPIRAR]
+```
+
+Verificar que:
+- ✅ Cada marcador se renderiza con su icono único
+- ✅ No hay errores en consola
+- ✅ Los marcadores no rompen el scroll del teleprompter
+
+**Prueba 5: Marcadores sin acento (compatibilidad)**
+1. Escribe: `Hola [ENFASIS] [SONREIR] [RAPIDO]`
+2. Verificar que:
+   - ✅ Los marcadores funcionan igual sin acento
+   - ✅ Se muestran con acento en el teleprompter (normalización)
+
+**Prueba 6: Guardar y cargar guion con marcadores**
+1. Escribe un guion con marcadores
+2. Clic en **"Guardar Guion"**
+3. Recarga la página (F5)
+4. Clic en **"Cargar Guion Guardado"**
+5. Selecciona el guion guardado
+6. Verificar que:
+   - ✅ Los marcadores se conservan intactos
+   - ✅ Se renderizan correctamente al abrir teleprompter
+
+**Prueba 7: Marcador inválido (no debe romper)**
+1. Escribe: `Hola [INVENTADO] mundo`
+2. Abrir teleprompter
+3. Verificar que:
+   - ✅ `[INVENTADO]` se muestra como texto normal (amarillo)
+   - ✅ No hay errores en consola
+
+**Nota:** La auto-pausa para `[PAUSA Xs]` será implementada en una mejora futura (requiere sincronización con el auto-scroll).
+
 ## 🐛 Si algo falla
 
 ```bash
