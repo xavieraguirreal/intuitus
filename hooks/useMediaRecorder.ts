@@ -102,12 +102,15 @@ export function useMediaRecorder(
       // Actualizar inmediatamente para mostrar 0:00
       setDuration(0);
 
-      timerRef.current = setInterval(() => {
+      const intervalId = setInterval(() => {
+        console.log('Timer tick callback executing'); // Debug
         const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
         console.log('Timer tick:', elapsed); // Debug
         setDuration(elapsed);
       }, 1000);
 
+      timerRef.current = intervalId;
+      console.log('setInterval created with ID:', intervalId);
       console.log('Recording started with mimeType:', mimeType);
       console.log('Timer started at:', new Date(startTimeRef.current).toISOString());
     } catch (err) {
@@ -182,17 +185,23 @@ export function useMediaRecorder(
     pausedTimeRef.current = 0;
   }, [recordingState]);
 
-  // Cleanup al desmontar
+  // Cleanup al desmontar (SOLO al desmontar el componente, no en cada cambio de estado)
   useEffect(() => {
     return () => {
-      if (mediaRecorderRef.current && recordingState !== 'idle') {
-        mediaRecorderRef.current.stop();
+      console.log('useMediaRecorder cleanup executing on unmount');
+      if (mediaRecorderRef.current) {
+        console.log('Stopping mediaRecorder in cleanup');
+        const state = mediaRecorderRef.current.state;
+        if (state === 'recording' || state === 'paused') {
+          mediaRecorderRef.current.stop();
+        }
       }
       if (timerRef.current) {
+        console.log('Clearing interval in cleanup, timerRef:', timerRef.current);
         clearInterval(timerRef.current);
       }
     };
-  }, [recordingState]);
+  }, []); // Sin dependencias - solo se ejecuta al desmontar
 
   // Formatear duración
   const formatDuration = useCallback((seconds: number): string => {
