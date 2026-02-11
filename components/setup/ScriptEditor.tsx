@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import mammoth from 'mammoth';
 
 interface ScriptEditorProps {
   value: string;
@@ -8,6 +9,9 @@ interface ScriptEditorProps {
 }
 
 export default function ScriptEditor({ value, onChange }: ScriptEditorProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState<string | null>(null);
   const [stats, setStats] = useState({
     words: 0,
     characters: 0,
@@ -31,17 +35,99 @@ export default function ScriptEditor({ value, onChange }: ScriptEditorProps) {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Manejar importación de archivos
+  const handleFileImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setImporting(true);
+    setImportError(null);
+
+    try {
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+
+      if (fileExtension === 'docx') {
+        // Procesar archivo Word con mammoth
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+
+        if (result.value) {
+          onChange(result.value);
+        } else {
+          throw new Error('No se pudo extraer texto del documento');
+        }
+      } else if (fileExtension === 'txt') {
+        // Procesar archivo de texto plano
+        const text = await file.text();
+        onChange(text);
+      } else {
+        throw new Error('Formato no soportado. Usa archivos .docx o .txt');
+      }
+
+      // Limpiar input para permitir reimportar el mismo archivo
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      console.error('Error importing file:', error);
+      setImportError(
+        error instanceof Error ? error.message : 'Error al importar el archivo'
+      );
+    } finally {
+      setImporting(false);
+    }
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="space-y-4">
       {/* Título */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Guion del Video
-        </label>
-        <p className="text-sm text-gray-500">
-          Escribe o pega el texto que leerás en el teleprompter
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Guion del Video
+          </label>
+          <p className="text-sm text-gray-500">
+            Escribe o pega el texto que leerás en el teleprompter
+          </p>
+        </div>
+
+        {/* Botón de importar */}
+        <button
+          onClick={handleImportClick}
+          disabled={importing}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+            />
+          </svg>
+          {importing ? 'Importando...' : 'Importar Word/TXT'}
+        </button>
+
+        {/* Input file oculto */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".docx,.txt"
+          onChange={handleFileImport}
+          className="hidden"
+        />
       </div>
+
+      {/* Mensaje de error de importación */}
+      {importError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+          <p className="text-red-800 text-sm">{importError}</p>
+        </div>
+      )}
 
       {/* Textarea */}
       <textarea
