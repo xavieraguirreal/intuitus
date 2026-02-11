@@ -30,11 +30,17 @@ export default function RecordPage() {
     pauseRecording,
     resumeRecording,
     stopRecording,
+    reset,
   } = useMediaRecorder(stream);
 
   useEffect(() => {
     setCurrentView('record');
   }, [setCurrentView]);
+
+  // Debug: Log cuando cambia formattedDuration
+  useEffect(() => {
+    console.log('Duration changed:', formattedDuration);
+  }, [formattedDuration]);
 
   // Redirigir si no hay proyecto activo
   useEffect(() => {
@@ -69,6 +75,13 @@ export default function RecordPage() {
     setTimeout(() => {
       setShowTeleprompter(true);
     }, 500); // Pequeño delay para mejor UX
+  };
+
+  const handleNewRecording = () => {
+    reset(); // Limpiar grabación anterior
+    setTimeout(() => {
+      startRecording(); // Iniciar nueva grabación
+    }, 100); // Pequeño delay para asegurar que el reset se complete
   };
 
   return (
@@ -278,7 +291,7 @@ export default function RecordPage() {
                               Ir a Editor
                             </button>
                             <button
-                              onClick={startRecording}
+                              onClick={handleNewRecording}
                               className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors"
                             >
                               Nueva Grabación
