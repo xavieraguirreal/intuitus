@@ -1,17 +1,20 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useTeleprompter } from '@/hooks/useTeleprompter';
 
 interface TeleprompterProps {
   script: string;
   isVisible?: boolean;
   onComplete?: () => void;
+  onClose?: () => void;
 }
 
 export default function Teleprompter({
   script,
   isVisible = true,
   onComplete,
+  onClose,
 }: TeleprompterProps) {
   const {
     isPlaying,
@@ -26,10 +29,37 @@ export default function Teleprompter({
     reset,
   } = useTeleprompter({ script, onComplete });
 
+  // Cerrar con tecla ESC
+  useEffect(() => {
+    if (!onClose || !isVisible) return;
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose, isVisible]);
+
   if (!isVisible) return null;
 
   return (
     <div className="teleprompter-wrapper fixed top-0 left-0 w-full h-full bg-black/90 z-50 flex flex-col">
+      {/* Botón de cerrar */}
+      {onClose && (
+        <button
+          onClick={onClose}
+          className="absolute top-4 left-4 z-[60] w-12 h-12 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center transition-all shadow-2xl border-2 border-white/20"
+          title="Cerrar Teleprompter (ESC)"
+        >
+          <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      )}
+
       {/* Indicador de lectura central */}
       <div className="reading-line absolute top-1/3 left-0 right-0 h-0.5 bg-yellow-400/40 pointer-events-none z-10" />
 
@@ -174,6 +204,11 @@ export default function Teleprompter({
         <p>
           <kbd className="px-2 py-1 bg-gray-700 rounded text-yellow-300">Ctrl+R</kbd> Reiniciar
         </p>
+        {onClose && (
+          <p>
+            <kbd className="px-2 py-1 bg-gray-700 rounded text-yellow-300">ESC</kbd> Cerrar
+          </p>
+        )}
       </div>
     </div>
   );

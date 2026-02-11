@@ -419,6 +419,7 @@ export default function RecordPage() {
             script={currentProject.script}
             isVisible={showTeleprompter}
             onComplete={handleTeleprompterComplete}
+            onClose={handleCloseTeleprompter}
           />
 
           {/* Indicador de grabación en teleprompter */}
@@ -436,31 +437,6 @@ export default function RecordPage() {
                   {recordingState === 'recording' ? 'Grabando' : 'Pausado'}
                 </span>
               </div>
-            </div>
-          )}
-
-          {/* Botón para cerrar teleprompter (solo si no está grabando) */}
-          {recordingState === 'idle' && (
-            <button
-              onClick={handleCloseTeleprompter}
-              className="fixed top-4 left-4 z-[60] px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg shadow-lg transition-colors flex items-center"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-              Cerrar Teleprompter
-            </button>
-          )}
-
-          {/* Ayuda: cerrar teleprompter durante grabación */}
-          {(recordingState === 'recording' || recordingState === 'paused') && (
-            <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-[60] bg-blue-900/80 rounded-lg px-4 py-2 text-xs text-blue-200">
-              Usa el botón "Ocultar Teleprompter" abajo para cerrar
             </div>
           )}
         </>
