@@ -1,29 +1,24 @@
 'use client';
 
-import { useMediaPermissions, PermissionState } from '@/hooks/useMediaPermissions';
+import { PermissionState } from '@/hooks/useMediaPermissions';
 
 interface PermissionsRequestProps {
-  onPermissionsGranted?: (stream: MediaStream) => void;
-  videoConstraints?: boolean | MediaTrackConstraints;
-  audioConstraints?: boolean | MediaTrackConstraints;
+  permissionState: PermissionState;
+  error: string | null;
+  onRequestPermissions: () => void;
+  onRetry: () => void;
+  videoEnabled?: boolean;
+  audioEnabled?: boolean;
 }
 
 export default function PermissionsRequest({
-  onPermissionsGranted,
-  videoConstraints = true,
-  audioConstraints = true,
+  permissionState,
+  error,
+  onRequestPermissions,
+  onRetry,
+  videoEnabled = true,
+  audioEnabled = true,
 }: PermissionsRequestProps) {
-  const { permissionState, error, requestPermissions, retry } = useMediaPermissions({
-    video: videoConstraints,
-    audio: audioConstraints,
-  });
-
-  const handleRequestPermissions = async () => {
-    const stream = await requestPermissions();
-    if (stream && onPermissionsGranted) {
-      onPermissionsGranted(stream);
-    }
-  };
 
   const getStateIcon = (state: PermissionState) => {
     switch (state) {
@@ -142,7 +137,7 @@ export default function PermissionsRequest({
                   d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
                 />
               </svg>
-              <span>{videoConstraints ? 'Cámara' : 'Sin cámara'}</span>
+              <span>{videoEnabled ? 'Cámara' : 'Sin cámara'}</span>
             </div>
             <div className="flex items-center justify-center text-sm text-gray-300">
               <svg className="w-5 h-5 mr-2 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -153,7 +148,7 @@ export default function PermissionsRequest({
                   d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
                 />
               </svg>
-              <span>{audioConstraints ? 'Micrófono' : 'Sin micrófono'}</span>
+              <span>{audioEnabled ? 'Micrófono' : 'Sin micrófono'}</span>
             </div>
           </div>
         )}
@@ -162,7 +157,7 @@ export default function PermissionsRequest({
         <div className="pt-4">
           {permissionState === 'idle' && (
             <button
-              onClick={handleRequestPermissions}
+              onClick={onRequestPermissions}
               className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-lg transition-colors inline-flex items-center"
             >
               <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -179,7 +174,7 @@ export default function PermissionsRequest({
 
           {(permissionState === 'denied' || permissionState === 'error') && (
             <button
-              onClick={retry}
+              onClick={onRetry}
               className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition-colors inline-flex items-center"
             >
               <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

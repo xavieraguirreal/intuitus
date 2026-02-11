@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/lib/store';
+import { useMediaPermissions } from '@/hooks/useMediaPermissions';
 import Teleprompter from '@/components/teleprompter/Teleprompter';
 import PermissionsRequest from '@/components/recording/PermissionsRequest';
 import VideoPreview from '@/components/recording/VideoPreview';
@@ -11,7 +12,12 @@ export default function RecordPage() {
   const { setCurrentView, currentProject } = useAppStore();
   const router = useRouter();
   const [showTeleprompter, setShowTeleprompter] = useState(false);
-  const [mediaStream, setMediaStream] = useState<MediaStream | null>(null);
+
+  // Hook de permisos a nivel de página (no se desmonta)
+  const { permissionState, error, stream, requestPermissions, retry } = useMediaPermissions({
+    video: true,
+    audio: true,
+  });
 
   useEffect(() => {
     setCurrentView('record');
@@ -73,15 +79,20 @@ export default function RecordPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Columna izquierda: Preview de cámara */}
             <div className="lg:col-span-2">
-              {!mediaStream ? (
+              {permissionState !== 'granted' || !stream ? (
                 /* Solicitud de permisos */
                 <PermissionsRequest
-                  onPermissionsGranted={(stream) => setMediaStream(stream)}
+                  permissionState={permissionState}
+                  error={error}
+                  onRequestPermissions={requestPermissions}
+                  onRetry={retry}
+                  videoEnabled={true}
+                  audioEnabled={true}
                 />
               ) : (
                 /* Preview de video */
                 <div className="bg-gray-800 rounded-lg shadow-xl overflow-hidden">
-                  <VideoPreview stream={mediaStream} className="w-full aspect-video" />
+                  <VideoPreview stream={stream} className="w-full aspect-video" />
 
                 {/* Controles de grabación (placeholder) */}
                 <div className="p-6 border-t border-gray-700">
