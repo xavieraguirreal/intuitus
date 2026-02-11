@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAppStore } from '@/lib/store';
 import { useMediaPermissions } from '@/hooks/useMediaPermissions';
+import { useMediaRecorder } from '@/hooks/useMediaRecorder';
 import Teleprompter from '@/components/teleprompter/Teleprompter';
 import PermissionsRequest from '@/components/recording/PermissionsRequest';
 import VideoPreview from '@/components/recording/VideoPreview';
@@ -18,6 +19,18 @@ export default function RecordPage() {
     video: true,
     audio: true,
   });
+
+  // Hook de grabación
+  const {
+    recordingState,
+    recordedBlob,
+    error: recordingError,
+    formattedDuration,
+    startRecording,
+    pauseRecording,
+    resumeRecording,
+    stopRecording,
+  } = useMediaRecorder(stream);
 
   useEffect(() => {
     setCurrentView('record');
@@ -94,35 +107,129 @@ export default function RecordPage() {
                 <div className="bg-gray-800 rounded-lg shadow-xl overflow-hidden">
                   <VideoPreview stream={stream} className="w-full aspect-video" />
 
-                {/* Controles de grabación (placeholder) */}
-                <div className="p-6 border-t border-gray-700">
-                  <div className="flex items-center justify-center gap-4">
-                    <button
-                      disabled
-                      className="px-6 py-3 bg-gray-700 text-gray-500 rounded-lg cursor-not-allowed"
-                    >
-                      <span className="flex items-center">
-                        <span className="w-3 h-3 bg-red-500 rounded-full mr-2"></span>
-                        Grabar
-                      </span>
-                    </button>
-                    <button
-                      disabled
-                      className="px-6 py-3 bg-gray-700 text-gray-500 rounded-lg cursor-not-allowed"
-                    >
-                      Pausar
-                    </button>
-                    <button
-                      disabled
-                      className="px-6 py-3 bg-gray-700 text-gray-500 rounded-lg cursor-not-allowed"
-                    >
-                      Detener
-                    </button>
+                  {/* Controles de grabación */}
+                  <div className="p-6 border-t border-gray-700">
+                    {/* Timer de grabación */}
+                    {recordingState !== 'idle' && (
+                      <div className="mb-4 text-center">
+                        <div className="inline-flex items-center bg-gray-900 rounded-lg px-6 py-3">
+                          {recordingState === 'recording' && (
+                            <span className="w-3 h-3 bg-red-500 rounded-full mr-3 animate-pulse"></span>
+                          )}
+                          <span className="text-2xl font-mono text-white font-bold">
+                            {formattedDuration}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Botones de control */}
+                    <div className="flex items-center justify-center gap-4">
+                      {recordingState === 'idle' && (
+                        <button
+                          onClick={startRecording}
+                          className="px-8 py-4 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors shadow-lg flex items-center"
+                        >
+                          <span className="w-4 h-4 bg-white rounded-full mr-3"></span>
+                          Iniciar Grabación
+                        </button>
+                      )}
+
+                      {recordingState === 'recording' && (
+                        <>
+                          <button
+                            onClick={pauseRecording}
+                            className="px-6 py-3 bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg font-semibold transition-colors flex items-center"
+                          >
+                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path
+                                fillRule="evenodd"
+                                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Pausar
+                          </button>
+                          <button
+                            onClick={stopRecording}
+                            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors flex items-center"
+                          >
+                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path
+                                fillRule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Detener
+                          </button>
+                        </>
+                      )}
+
+                      {recordingState === 'paused' && (
+                        <>
+                          <button
+                            onClick={resumeRecording}
+                            className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold transition-colors flex items-center"
+                          >
+                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path
+                                fillRule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Reanudar
+                          </button>
+                          <button
+                            onClick={stopRecording}
+                            className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors flex items-center"
+                          >
+                            <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                              <path
+                                fillRule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7a1 1 0 00-1 1v4a1 1 0 001 1h4a1 1 0 001-1V8a1 1 0 00-1-1H8z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                            Detener
+                          </button>
+                        </>
+                      )}
+
+                      {recordingState === 'stopped' && recordedBlob && (
+                        <div className="flex flex-col items-center gap-4">
+                          <p className="text-green-400 font-semibold">
+                            ✓ Grabación completada ({formattedDuration})
+                          </p>
+                          <div className="flex gap-4">
+                            <button
+                              onClick={() => {
+                                // TODO: Guardar en proyecto e ir a editor
+                                console.log('Recorded blob:', recordedBlob);
+                              }}
+                              className="px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white rounded-lg font-semibold transition-colors"
+                            >
+                              Ir a Editor
+                            </button>
+                            <button
+                              onClick={startRecording}
+                              className="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg font-semibold transition-colors"
+                            >
+                              Nueva Grabación
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Error de grabación */}
+                    {recordingError && (
+                      <div className="mt-4 bg-red-900/30 border border-red-700 rounded-lg p-3">
+                        <p className="text-sm text-red-300 text-center">{recordingError}</p>
+                      </div>
+                    )}
                   </div>
-                  <p className="text-center text-sm text-gray-500 mt-4">
-                    Controles de grabación (Tarea #6)
-                  </p>
-                </div>
               </div>
               )}
             </div>
