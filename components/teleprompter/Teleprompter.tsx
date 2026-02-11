@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useTeleprompter } from '@/hooks/useTeleprompter';
+import { parseScript, MARKER_ICONS } from '@/lib/scriptMarkers';
 
 interface TeleprompterProps {
   script: string;
@@ -28,6 +29,9 @@ export default function Teleprompter({
     decreaseFontSize,
     reset,
   } = useTeleprompter({ script, onComplete });
+
+  // Parsear script con marcadores
+  const scriptSegments = useMemo(() => parseScript(script), [script]);
 
   // Cerrar con tecla ESC
   useEffect(() => {
@@ -74,16 +78,50 @@ export default function Teleprompter({
 
         {/* Contenido del script */}
         <div className="teleprompter-content mx-auto px-6" style={{ maxWidth: '350px' }}>
-          <p
-            className="text-yellow-300 leading-relaxed whitespace-pre-wrap"
+          <div
+            className="leading-relaxed"
             style={{
               fontSize: `${fontSize}px`,
               lineHeight: '1.5',
-              textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
             }}
           >
-            {script}
-          </p>
+            {scriptSegments.map((segment, index) => {
+              if (segment.type === 'text') {
+                return (
+                  <span
+                    key={index}
+                    className="text-yellow-300"
+                    style={{
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                      whiteSpace: 'pre-wrap',
+                    }}
+                  >
+                    {segment.content}
+                  </span>
+                );
+              } else {
+                // Marcador
+                const icon = segment.markerType ? MARKER_ICONS[segment.markerType] : '';
+                const displayText = segment.pauseDuration
+                  ? `${icon} ${segment.markerType} ${segment.pauseDuration}s`
+                  : `${icon} ${segment.markerType}`;
+
+                return (
+                  <div
+                    key={index}
+                    className="my-4 px-4 py-2 bg-green-900/40 border-l-4 border-green-400 rounded"
+                    style={{
+                      fontSize: `${fontSize * 0.75}px`,
+                    }}
+                  >
+                    <span className="text-green-300 font-semibold">
+                      {displayText}
+                    </span>
+                  </div>
+                );
+              }
+            })}
+          </div>
         </div>
 
         {/* Padding inferior para poder scrollear hasta el final */}

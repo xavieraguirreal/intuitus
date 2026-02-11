@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import mammoth from 'mammoth';
+import MarkersHelp from './MarkersHelp';
 
 interface ScriptEditorProps {
   value: string;
@@ -195,12 +196,13 @@ En este video aprenderemos a..."
             <h4 className="text-sm font-semibold text-blue-900 mb-1">
               💡 Consejos para tu guion:
             </h4>
-            <ul className="text-sm text-blue-800 space-y-1">
+            <ul className="text-sm text-blue-800 space-y-1 mb-3">
               <li>• Escribe con naturalidad, como si hablaras con alguien</li>
               <li>• Usa párrafos cortos para facilitar la lectura</li>
-              <li>• Marca pausas importantes con saltos de línea</li>
+              <li>• Usa <strong>marcadores de expresión</strong> como [PAUSA 2s] o [SONREÍR]</li>
               <li>• Velocidad recomendada: 120-150 palabras por minuto</li>
             </ul>
+            <MarkersHelp />
           </div>
         </div>
       </div>
