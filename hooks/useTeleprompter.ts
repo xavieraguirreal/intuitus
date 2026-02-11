@@ -131,7 +131,7 @@ export function useTeleprompter({ script, onComplete }: UseTeleprompterProps) {
   }, []);
 
   const increaseSpeed = useCallback(() => {
-    setSpeed((prev) => Math.min(prev + 10, 500)); // Máximo 500 WPM
+    setSpeed((prev) => Math.min(prev + 10, 1000)); // Máximo 1000 WPM
   }, []);
 
   const decreaseSpeed = useCallback(() => {
@@ -153,7 +153,7 @@ export function useTeleprompter({ script, onComplete }: UseTeleprompterProps) {
   }, []);
 
   const setCustomSpeed = useCallback((newSpeed: number) => {
-    setSpeed(Math.max(50, Math.min(500, newSpeed)));
+    setSpeed(Math.max(50, Math.min(1000, newSpeed)));
   }, []);
 
   const setCustomFontSize = useCallback((newSize: number) => {
