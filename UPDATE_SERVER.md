@@ -64,7 +64,26 @@ Deberías ver:
 - ✅ Botón "Crear Nuevo Proyecto"
 - ✅ Navegación funcional entre vistas
 
-### 2. Probar el Teleprompter (Tarea #4)
+### 2. Probar el Sistema de Permisos (Tarea #5)
+
+1. Ve a `/setup` y crea un nuevo proyecto con un guion
+2. Clic en "Continuar a Grabación"
+3. En la página `/record`, deberías ver:
+   - ✅ Card de "Permisos Requeridos" con icono de cámara
+   - ✅ Lista de permisos: Cámara y Micrófono
+   - ✅ Botón "Solicitar Permisos"
+4. Clic en "Solicitar Permisos"
+5. El navegador mostrará un popup pidiendo permisos
+6. **Si aceptas:**
+   - ✅ Verás el preview de tu cámara en tiempo real
+   - ✅ La imagen debe estar "espejada" (efecto mirror)
+   - ✅ Controles de grabación aparecen debajo (deshabilitados por ahora)
+7. **Si rechazas:**
+   - ✅ Mensaje de error claro
+   - ✅ Botón "Reintentar"
+   - ✅ Sección de ayuda explicando cómo habilitar permisos manualmente
+
+### 3. Probar el Teleprompter (Tarea #4)
 
 1. Ve a `/setup` (clic en ⚙️ Configurar)
 2. Escribe un guion de ejemplo:
