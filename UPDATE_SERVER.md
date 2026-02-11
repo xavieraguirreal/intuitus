@@ -394,6 +394,110 @@ Verificar que:
 
 **Nota:** La auto-pausa para `[PAUSA Xs]` será implementada en una mejora futura (requiere sincronización con el auto-scroll).
 
+### 8. Probar Teleprompter Standalone (Tarea #21 - NUEVO)
+
+El teleprompter standalone permite usar el teleprompter sin crear proyecto ni grabar. Ideal para videollamadas.
+
+**Prueba 1: Acceder desde home**
+1. Ve a `https://intuitus.verumax.com`
+2. Verificar que aparecen **DOS botones:**
+   - ✅ "Crear Proyecto de Video" (azul)
+   - ✅ "Solo Teleprompter" (amarillo)
+3. Debajo del botón amarillo dice:
+   - ✅ "Úsalo para videollamadas, presentaciones en vivo, sin grabar"
+
+**Prueba 2: Acceso directo por URL**
+1. Ir directamente a: `https://intuitus.verumax.com/teleprompter`
+2. Verificar que aparece:
+   - ✅ Título: "📖 Teleprompter"
+   - ✅ Subtítulo explicando el uso
+   - ✅ Interfaz minimalista (sin preview de cámara)
+
+**Prueba 3: Interfaz y funcionalidades**
+1. En `/teleprompter`, verificar que hay:
+   - ✅ **Tres botones** arriba:
+     - "Cargar Guion" (azul)
+     - "Guardar" (verde)
+     - "Importar" (azul)
+   - ✅ Textarea grande para escribir guion
+   - ✅ Contador de palabras y tiempo estimado
+   - ✅ Link de ayuda de marcadores
+   - ✅ Botón grande amarillo: "Iniciar Teleprompter"
+   - ✅ Botón "← Volver al inicio"
+
+**Prueba 4: Usar teleprompter standalone**
+1. Escribe un guion de prueba:
+```
+Hola, estoy en una videollamada de Zoom.
+[PAUSA 2s]
+Voy a usar este teleprompter para leer mi presentación.
+[SONREÍR]
+Es muy útil porque no necesito grabar nada.
+```
+
+2. Verificar contador actualiza:
+   - ✅ Palabras: ~20
+   - ✅ Tiempo estimado: ~0:08
+
+3. Clic en **"Iniciar Teleprompter"**
+4. Verificar que:
+   - ✅ Se abre teleprompter en pantalla completa
+   - ✅ Botón de cerrar (X) arriba izquierda
+   - ✅ Todos los controles funcionan (velocidad, tamaño, etc.)
+   - ✅ Marcadores se muestran en verde
+   - ✅ Presionar ESC cierra el teleprompter
+
+**Prueba 5: Guardar y cargar guiones**
+1. Escribe un guion
+2. Clic en **"Guardar"**
+3. Dale un nombre: "Presentación Zoom"
+4. Verificar mensaje verde: "✓ Guion guardado correctamente"
+5. Borra el textarea
+6. Clic en **"Cargar Guion"**
+7. Verificar que:
+   - ✅ Se abre modal con biblioteca
+   - ✅ Aparece el guion guardado
+   - ✅ Clic en "Usar" carga el guion en el editor
+   - ✅ Muestra "Guion actual: Presentación Zoom"
+
+**Prueba 6: Importar archivo**
+1. Crea un archivo `presentacion.txt` con texto
+2. En `/teleprompter`, clic en **"Importar"**
+3. Selecciona el archivo
+4. Verificar que:
+   - ✅ El contenido se carga en el textarea
+   - ✅ Contador se actualiza
+   - ✅ Puedes iniciar teleprompter inmediatamente
+
+**Prueba 7: Uso real en videollamada**
+Caso de uso real:
+1. Abre Zoom/Meet en una pestaña
+2. Abre `https://intuitus.verumax.com/teleprompter` en otra pestaña
+3. Escribe tu guion o carga uno guardado
+4. Clic en "Iniciar Teleprompter"
+5. Alterna entre pestañas (Alt+Tab)
+6. Verificar que:
+   - ✅ Puedes leer el teleprompter mientras estás en videollamada
+   - ✅ No pide permisos de cámara (porque no graba)
+   - ✅ Es rápido y fácil de usar
+
+**Prueba 8: Comparación con modo grabación**
+Diferencias clave:
+- ✅ NO pide permisos de cámara/micrófono
+- ✅ NO muestra preview de video
+- ✅ Interfaz más simple y rápida
+- ✅ Mismo teleprompter (mismas funcionalidades)
+- ✅ Comparte biblioteca de guiones con modo grabación
+
+**Navegación entre modos:**
+1. Desde `/teleprompter`, clic en "← Volver al inicio"
+2. Desde home, clic en "Crear Proyecto de Video"
+3. Verificar que son flujos independientes
+4. Verificar que ambos comparten:
+   - ✅ Biblioteca de guiones (IndexedDB)
+   - ✅ Sistema de marcadores
+   - ✅ Importar Word/TXT
+
 ## 🐛 Si algo falla
 
 ```bash
