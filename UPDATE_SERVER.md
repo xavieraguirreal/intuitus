@@ -17,6 +17,10 @@ git pull origin master
 # Instalar nuevas dependencias (si las hay)
 npm install
 
+# IMPORTANTE: Arreglar permisos inmediatamente después de npm install
+chown -R verumax:verumax /home/verumax/public_html/intuitus
+chmod -R +x /home/verumax/public_html/intuitus/node_modules/.bin
+
 # Build del proyecto
 npm run build
 
@@ -27,8 +31,28 @@ pm2 restart intuitus
 pm2 logs intuitus --lines 20
 ```
 
+## 🔧 Si hay error "Permiso denegado" en npm run build
+
+```bash
+# Solución rápida: reinstalar node_modules
+rm -rf /home/verumax/public_html/intuitus/node_modules
+rm -f /home/verumax/public_html/intuitus/package-lock.json
+
+# Reinstalar y arreglar permisos
+npm install
+chown -R verumax:verumax /home/verumax/public_html/intuitus
+chmod -R +x /home/verumax/public_html/intuitus/node_modules/.bin
+
+# Build
+npm run build
+
+# Reiniciar PM2
+pm2 restart intuitus
+```
+
 ## ✅ Verificar que funciona
 
+### 1. Página principal
 Abre en el navegador:
 ```
 http://intuitus.verumax.com
@@ -39,6 +63,33 @@ Deberías ver:
 - ✅ Breadcrumb con iconos (🏠 ⚙️ 🎬 ✂️)
 - ✅ Botón "Crear Nuevo Proyecto"
 - ✅ Navegación funcional entre vistas
+
+### 2. Probar el Teleprompter (Tarea #4)
+
+1. Ve a `/setup` (clic en ⚙️ Configurar)
+2. Escribe un guion de ejemplo:
+   ```
+   Hola, bienvenidos a este tutorial.
+   En este video aprenderemos a usar el teleprompter.
+   Podemos controlar la velocidad con las flechas.
+   Y el tamaño de fuente con + y -.
+   ```
+3. Opcional: Sube un logo
+4. Clic en "Continuar a Grabación"
+5. En la página `/record`, clic en "Abrir Teleprompter"
+6. **Probar controles de teclado:**
+   - `Espacio` - Play/Pausa (el texto debe auto-scrollear)
+   - `↑` - Aumentar velocidad (WPM)
+   - `↓` - Disminuir velocidad
+   - `+` - Aumentar tamaño de fuente
+   - `-` - Disminuir tamaño de fuente
+   - `Ctrl+R` - Reiniciar desde el inicio
+7. Verificar que:
+   - ✅ Fondo negro con texto amarillo (alta legibilidad)
+   - ✅ Columna estrecha (350px) centrada
+   - ✅ Línea de lectura horizontal visible
+   - ✅ Auto-scroll suave
+   - ✅ Botón "Cerrar Teleprompter" en esquina superior izquierda funciona
 
 ## 🐛 Si algo falla
 
