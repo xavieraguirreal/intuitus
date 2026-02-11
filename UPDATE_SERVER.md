@@ -83,7 +83,30 @@ Deberías ver:
    - ✅ Botón "Reintentar"
    - ✅ Sección de ayuda explicando cómo habilitar permisos manualmente
 
-### 3. Probar el Teleprompter (Tarea #4)
+### 3. Probar el Grabador de Video (Tarea #6 - NUEVO)
+
+**Con los permisos concedidos y el preview de cámara activo:**
+
+1. Clic en **"Iniciar Grabación"** (botón rojo)
+2. Verificar que:
+   - ✅ Timer comienza a contar (0:00, 0:01, 0:02...)
+   - ✅ Punto rojo parpadeante junto al timer
+   - ✅ Aparecen botones "Pausar" y "Detener"
+3. Hablar frente a la cámara por 5-10 segundos
+4. Probar **"Pausar"**:
+   - ✅ Timer se detiene
+   - ✅ Aparece botón "Reanudar"
+5. Clic en **"Reanudar"**:
+   - ✅ Timer continúa desde donde se pausó
+6. Clic en **"Detener"**:
+   - ✅ Mensaje "✓ Grabación completada (X:XX)"
+   - ✅ Aparecen botones "Ir a Editor" y "Nueva Grabación"
+7. Abrir consola del navegador (F12):
+   - ✅ Debería mostrar "Recording started with mimeType: video/webm..."
+   - ✅ Al detener: "Recording stopped"
+   - ✅ Ver objeto Blob con el video grabado
+
+### 4. Probar el Teleprompter (Tarea #4)
 
 1. Ve a `/setup` (clic en ⚙️ Configurar)
 2. Escribe un guion de ejemplo:
