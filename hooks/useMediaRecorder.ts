@@ -96,13 +96,20 @@ export function useMediaRecorder(
       chunksRef.current = [];
 
       // Iniciar timer
-      startTimeRef.current = Date.now() - pausedTimeRef.current;
+      pausedTimeRef.current = 0; // Reset en cada inicio
+      startTimeRef.current = Date.now();
+
+      // Actualizar inmediatamente para mostrar 0:00
+      setDuration(0);
+
       timerRef.current = setInterval(() => {
         const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
+        console.log('Timer tick:', elapsed); // Debug
         setDuration(elapsed);
       }, 1000);
 
       console.log('Recording started with mimeType:', mimeType);
+      console.log('Timer started at:', new Date(startTimeRef.current).toISOString());
     } catch (err) {
       console.error('Error starting recording:', err);
       setError(err instanceof Error ? err.message : 'Error al iniciar grabación');
@@ -123,7 +130,7 @@ export function useMediaRecorder(
       }
       pausedTimeRef.current = Date.now() - startTimeRef.current;
 
-      console.log('Recording paused');
+      console.log('Recording paused at:', pausedTimeRef.current / 1000, 'seconds');
     }
   }, [recordingState]);
 

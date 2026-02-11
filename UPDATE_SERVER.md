@@ -83,7 +83,34 @@ Deberías ver:
    - ✅ Botón "Reintentar"
    - ✅ Sección de ayuda explicando cómo habilitar permisos manualmente
 
-### 3. Probar el Grabador de Video (Tarea #6 - NUEVO)
+### 3. Probar Integración Teleprompter + Grabador (Tarea #7 - NUEVO)
+
+**Con los permisos concedidos:**
+
+1. Verificar que aparecen **DOS botones** de inicio:
+   - ✅ "Grabar con Teleprompter" (rojo, recomendado)
+   - ✅ "Grabar sin Teleprompter" (gris)
+2. Clic en **"Grabar con Teleprompter"**:
+   - ✅ Inicia grabación (timer empieza a contar)
+   - ✅ El teleprompter se abre automáticamente después de 0.5 segundos
+   - ✅ En el teleprompter se ve: timer de grabación arriba al centro
+3. **Durante la grabación con teleprompter abierto:**
+   - ✅ Presionar `Espacio` para pausar/reanudar el scroll del teleprompter
+   - ✅ Usar `↑/↓` para ajustar velocidad
+   - ✅ Debe verse un mensaje abajo: "Usa el botón 'Ocultar Teleprompter' abajo para cerrar"
+4. **Cerrar el overlay** (sin detener grabación):
+   - ✅ Scroll hacia abajo hasta ver los controles
+   - ✅ Clic en "Ocultar Teleprompter" (botón amarillo)
+   - ✅ La grabación sigue (timer continúa)
+5. **Re-abrir teleprompter durante grabación:**
+   - ✅ Clic en "Mostrar Teleprompter"
+   - ✅ El teleprompter se abre de nuevo
+6. **Al terminar de leer:**
+   - ✅ El scroll del teleprompter llega al final automáticamente
+   - ✅ La grabación se detiene automáticamente
+   - ✅ Mensaje: "✓ Grabación completada (X:XX)"
+
+### 4. Probar el Grabador de Video (Tarea #6)
 
 **Con los permisos concedidos y el preview de cámara activo:**
 
