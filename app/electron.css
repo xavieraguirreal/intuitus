@@ -1,0 +1,51 @@
+/* Estilos para la app de Electron */
+
+/* Hacer la barra de título arrastrable */
+.electron-drag {
+  -webkit-app-region: drag;
+  app-region: drag;
+}
+
+/* Los controles no deben ser arrastrables */
+.electron-no-drag {
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+/* Personalizar scrollbar para Electron */
+.electron-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.electron-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.electron-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.electron-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Personalizar input range */
+input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+}
+
+input[type='range']::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #3b82f6;
+  cursor: pointer;
+  border: none;
+}

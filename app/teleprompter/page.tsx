@@ -6,9 +6,19 @@ import { useScriptLibrary } from '@/hooks/useScriptLibrary';
 import Teleprompter from '@/components/teleprompter/Teleprompter';
 import ScriptLibrary from '@/components/scripts/ScriptLibrary';
 import MarkersHelp from '@/components/setup/MarkersHelp';
+import TitleBar from '@/components/electron/TitleBar';
 import mammoth from 'mammoth';
+import '../electron.css';
 
 export default function TeleprompterStandalonePage() {
+  const [isElectron, setIsElectron] = useState(false);
+
+  useEffect(() => {
+    // Detectar si estamos en Electron
+    if (typeof window !== 'undefined' && (window as any).electronAPI?.isElectron) {
+      setIsElectron(true);
+    }
+  }, []);
   const router = useRouter();
   const { save: saveScript } = useScriptLibrary();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -114,7 +124,10 @@ export default function TeleprompterStandalonePage() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 py-8 px-4">
+      {/* Barra de título para Electron */}
+      <TitleBar />
+
+      <div className={`min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 px-4 ${isElectron ? 'pt-16 pb-8' : 'py-8'}`}>
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
